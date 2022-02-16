@@ -84,6 +84,36 @@ cursor = engine.execute(query)
 print([row for row in cursor])
 ```
 
+### Using SQLAlchemy with azure cli login
+
+For testing purpose use the azure-cli with a user having permission to access the kusto database
+
+```bash
+$ az login
+```
+
+```python
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer
+
+engine = create_engine(
+    f"kustosql+{kusto_url}/{database_name}?"
+    f"az_cli=True"
+)
+
+my_table = Table(
+        "MyTable",
+        MetaData(),
+        Column("Id", Integer),
+        Column("Text", String),
+)
+
+query = my_table.select().limit(5)
+
+engine.connect()
+cursor = engine.execute(query)
+print([row for row in cursor])
+```
+
 ## Contributing
 
 Please see the [CONTRIBUTING.md](.github/CONTRIBUTING.md) for development setup and contributing process guidelines.

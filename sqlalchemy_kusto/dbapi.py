@@ -35,6 +35,7 @@ def connect(
     database: str,
     msi: bool = False,
     user_msi: str = None,
+    az_cli: bool = False,
     azure_ad_client_id: str = None,
     azure_ad_client_secret: str = None,
     azure_ad_tenant_id: str = None,
@@ -45,6 +46,7 @@ def connect(
         database,
         msi,
         user_msi,
+        az_cli,
         azure_ad_client_id,
         azure_ad_client_secret,
         azure_ad_tenant_id,
@@ -60,6 +62,7 @@ class Connection:
         database: str,
         msi: bool = False,
         user_msi: str = None,
+        az_cli: bool = False,
         azure_ad_client_id: str = None,
         azure_ad_client_secret: str = None,
         azure_ad_tenant_id: str = None,
@@ -73,6 +76,8 @@ class Connection:
             kcsb = KustoConnectionStringBuilder.with_aad_managed_service_identity_authentication(
                 cluster, client_id=user_msi
             )
+        elif az_cli:
+            kcsb = KustoConnectionStringBuilder.with_az_cli_authentication(cluster)
         else:
             # Service Principal auth
             kcsb = KustoConnectionStringBuilder.with_aad_application_key_authentication(
